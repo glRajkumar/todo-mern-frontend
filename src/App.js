@@ -7,7 +7,8 @@ import ToDoList from './ToDoList';
 import axios from 'axios'
 import Home from './Home';
 import Archived from './Archived';
-import Edit from './Edit';
+import NotFound from './NotFound';
+import Protected from './Protected';
 
 const App = () => {
   const history = useHistory()
@@ -31,6 +32,7 @@ const App = () => {
         }
     }).then((res)=>{
       setEmail(res.data.email)
+      history.push("/todolist")
     })
     }
   }, [token])
@@ -70,7 +72,7 @@ const App = () => {
               <Login updateEmail={updateEmail} />
             </Route>
             <Route path="/signup">
-              <Signup updateEmail={updateEmail} />
+              <Signup />
             </Route>
             <Route path="/createtodo">
               <CreateTodo />
@@ -81,8 +83,8 @@ const App = () => {
             <Route path="/archived">
               <Archived />
             </Route>
-            <Route path="/editlist">
-              <Edit />
+            <Route path="*">
+              <NotFound />
             </Route>
           </Switch>
         </div>

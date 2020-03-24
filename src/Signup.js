@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import axios from 'axios'
 import {useHistory, withRouter} from 'react-router-dom'
 
-const Signup = ({updateEmail}) =>{
+const Signup = () =>{
     const [ name, setName ] = useState('')
     const [ email, setEmail ] = useState('')
     const [password, setPass] = useState('')
@@ -14,9 +14,6 @@ const Signup = ({updateEmail}) =>{
 
         axios.post("/user/register",{ name, email, password })
         .then((res)=>{
-            console.log(res)
-            console.log(res.data)
-            updateEmail(email)
             history.push("/login")
         }).catch((err)=>{
             setLogfail(true)

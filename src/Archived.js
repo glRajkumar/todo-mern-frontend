@@ -7,10 +7,10 @@ function Archived(){
     const history = useHistory()
 
     useEffect(()=>{
-        getTodos()
-    }, [todos])
+        getArchTodos()
+    }, [])
 
-    const getTodos = () =>{
+    const getArchTodos = () =>{
         let token = localStorage.getItem("token")
         axios.get("/todo/finished",{
             headers : {
@@ -18,39 +18,46 @@ function Archived(){
             }
         }).then((res)=>{
             setToDo(res.data)
+        }).catch((err)=>{
+            console.log(err)
         })
     }
 
     const onDelete = (value) =>{
         let token = localStorage.getItem("token")
-        axios.delete("/todo",{id:value},{
+        axios.delete("/todo",{data:{id: value},
             headers : {
                 Authorization: "Bearer " + token
             }
         }).then((res)=>{
-           getTodos()
+           getArchTodos()
+        }).catch((err)=>{
+            console.log(err)
         })
     }
 
     return (
+        <>
     <div className="row">
         <button className="btn btn-sm ml-4 btn-primary" onClick={()=>{history.push('/todolist')}}>
             Back to Todos
         </button>
-        
+    </div>
+    <div className="row">
         <div className="col-md-4 offset-md-4">
         { todos.map((todo)=>(
             <div key={todo._id} className="card mb-2">
                 <div className="card-body">
                     <h5 className="card-title">{todo.title}</h5>
                     <p className="card-text">{todo.description}</p>
-                    <button className="btn btn-danger btn-sm" value={todo._id} onClick={onDelete(todo._id)}>Delete</button>
+                    <button className="btn btn-danger btn-sm" onClick={()=>{onDelete(todo._id)}}>Delete</button>
                 </div>
             </div>
             ))
         }
         </div>
     </div>
+    </>
   )
 }
 

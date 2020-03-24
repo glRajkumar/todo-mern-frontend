@@ -1,40 +1,18 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import axios from 'axios'
-import {useHistory, withRouter} from 'react-router-dom'
 
 function Edit(props){
-    const [ id, setId] = useState('')
-    const [ title, setTitle ] = useState('')
-    const [ description, setDescription ] = useState('') 
-    const history = useHistory()
+    const [ title, setTitle ] = useState(props.title)
+    const [ description, setDescription ] = useState(props.description) 
     
-    useEffect(()=>{
-        if(id !== ''){
-        getTodoOfId()
-        }
-    },[id])
-
-    const getTodoOfId = () =>{
-        let token = localStorage.getItem("token")
-        let idvalue = setId(props.location.value)
-        console.log(idvalue) 
-        axios.get("/todo",{
-            headers : {
-                Authorization: "Bearer " + token
-            }
-        }).then((res)=>{
-            console.log(res.data)
-        })
-    }
-
     const onSubmit = () => {
         let token = localStorage.getItem("token")
-        axios.put("/todo", {id, title, description},{
+        axios.put("/todo", {id: props.id, title, description},{
             headers : {
                 Authorization: "Bearer " + token
             }
         }).then((res)=>{
-            history.push("/todolist")
+            props.onEdit('','','')
         })
     }
 
@@ -44,19 +22,29 @@ function Edit(props){
             <div>
                 <div className="form-group">
                     <label>Title </label>
-                    <input className="form-control" type="text" onChange={(e)=>{setTitle(e.target.value)}}></input>
+                    <input 
+                        className="form-control"
+                        type="text"
+                        placeholder={`${title}`} 
+                        defaultValue={title} 
+                        onChange={(e)=>{setTitle(e.target.value)}}
+                        />
                 </div>
-
                 <div className="form-group">
-                <label>Description </label>
-                <textarea className="form-control" type="text" onChange={(e)=>{setDescription(e.target.value)}}></textarea>
+                    <label>Description </label>
+                    <textarea 
+                        className="form-control"
+                        type="text"
+                        placeholder={`${description}`} 
+                        defaultValue={description} 
+                        onChange={(e)=>{setDescription(e.target.value)}}
+                        ></textarea>
                 </div>
                 <button className="btn btn-outline-primary" onClick={onSubmit}>Submit</button>
             </div>
         </div>
     </div>
     )
-
 }
 
-export default withRouter(Edit)
+export default Edit
