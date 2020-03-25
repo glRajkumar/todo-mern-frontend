@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Switch, Route, useHistory, withRouter } from 'react-router-dom'
+import { Switch, Route, useHistory, withRouter, Redirect } from 'react-router-dom'
 import Login from './Login';
 import Signup from './Signup';
 import CreateTodo from './CreateTodo';
@@ -9,6 +9,7 @@ import Home from './Home';
 import Archived from './Archived';
 import NotFound from './NotFound';
 import Protected from './Protected';
+import UnAuthor from './UnAuthor';
 
 const App = () => {
   const history = useHistory()
@@ -63,29 +64,18 @@ const App = () => {
           </div>
         </nav>
 
+        {email ? <Redirect to="/todolist" /> : null}
+
         <div>
           <Switch>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="/login">
-              <Login updateEmail={updateEmail} />
-            </Route>
-            <Route path="/signup">
-              <Signup />
-            </Route>
-            <Route path="/createtodo">
-              <CreateTodo />
-            </Route>
-            <Route path="/todolist">
-              <ToDoList />
-            </Route>
-            <Route path="/archived">
-              <Archived />
-            </Route>
-            <Route path="*">
-              <NotFound />
-            </Route>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" render={(props)=><Login updateEmail={updateEmail} />} />
+            <Route exact path="/signup" component={Signup} />
+            <Protected exact path="/createtodo" email={email} component={CreateTodo} />
+            <Protected exact path="/todolist" email={email} component={ToDoList} />
+            <Protected exact path="/archived" email={email} component={Archived} />
+            <Route exact path="/unauth" component={UnAuthor} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </div>
     </div>

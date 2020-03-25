@@ -1,10 +1,16 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
-const Protected = ({ component: Component, ...rest }) =>{
+const Protected = ({ component: Component, email, ...rest }) =>{
     return(
         <Route {...rest} render={
-            props => <Component {...rest} {...props} />
+            props =>{
+                if(email){
+                    return <Component {...rest} {...props} />
+                }else{
+                    return <Redirect to='/unauth' />
+                }
+            } 
          } />
     )
 }
